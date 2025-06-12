@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Rutinas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2 {
+            color: white;
+            text-align: center;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: #555;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: #222;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        
+        input, select, button {
+            padding: 8px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #ddd;
+        }
+        
+        #rutina-text {
+            width: 100%;
+            height: 400px;
+            background-color: black;
+            color: white;
+            border: 1px solid #444;
+            padding: 10px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+        
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .gym-label {
+            color: yellow;
+            font-family: monospace;
+            position: absolute;
+        }
+        
+        .link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        .yellow-text {
+            color: yellow;
+            font-family: monospace;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Rutinas</h1>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="openTab('bienvenida')">Bienvenida</button>
+            <button class="tab" onclick="openTab('datos')">Datos del usuario</button>
+            <button class="tab" onclick="openTab('rutina')">Tu rutina</button>
+        </div>
+        
+        <div id="bienvenida" class="tab-content active">
+            <h2>¡Bienvenido al generador de rutinas!</h2>
+            <div class="yellow-text">GYM</div>
+            <div class="ascii-art">
+              __
+             / _)
+     _.----._/ /
+    /         /
+ __/ (  | (  |
+/__.-'|_|--|_|
+            </div>
+            <button onclick="openTab('datos')">Iniciar</button>
+        </div>
+        
+        <div id="datos" class="tab-content">
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad">
+            
+            <label for="peso">Peso (kg):</label>
+            <input type="number" id="peso">
+            
+            <label for="sexo">Sexo:</label>
+            <select id="sexo">
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+            </select>
+            
+            <label for="ubicacion">Ubicación para entrenar:</label>
+            <select id="ubicacion">
+                <option value="En casa">En casa</option>
+                <option value="Gimnasio">Gimnasio</option>
+            </select>
+            
+            <button onclick="generarRutina()">Generar rutina</button>
+        </div>
+        
+        <div id="rutina" class="tab-content">
+            <textarea id="rutina-text" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show the selected tab content and mark its button as active
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function generarRutina() {
+            const edad = parseInt(document.getElementById('edad').value);
+            const ubicacion = document.getElementById('ubicacion').value;
+            const rutinaText = document.getElementById('rutina-text');
+            
+            if (isNaN(edad)) {
+                rutinaText.value = "Por favor ingresa una edad válida.";
+                openTab('rutina');
+                return;
+            }
+            
+            let rutina = "";
+            
+            if (15 <= edad && edad <= 50) {
+                if (ubicacion === "En casa") {
+                    rutina = `
+Rutina en Casa (3 días por semana):
+
+Día 1 - Cuerpo completo
+- Sentadillas con peso corporal - 3x15
+- Flexiones (push-ups) - 3x10-15
+- Remo invertido en mesa - 3x8-12
+- Plancha - 3x30 seg
+
+Día 2 - Tren inferior
+- Zancadas - 3x12 por pierna
+- Puente de glúteos - 3x15
+- Subidas a escalón - 3x10 por pierna
+- Crunch abdominal - 3x20
+
+Día 3 - Tren superior
+- Flexiones con pies elevados - 3x10
+- Fondos entre sillas - 3x10
+- Curl de bíceps con mochilas - 3x12
+- Plancha lateral - 3x30 seg por lado
+`;
+                } else if (ubicacion === "Gimnasio") {
+                    rutina = `
+Rutina de Gimnasio estilo Jeff Nippard (Push/Pull/Legs - 6 días)
+
+🎥 Enlaces a entrenamientos:
+Push: <span class="link" onclick="window.open('https://www.youtube.com/watch?v=kXYLkE2ZzOU')">https://www.youtube.com/watch?v=kXYLkE2ZzOU</span>  
+Pull: <span class="link" onclick="window.open('https://www.youtube.com/watch?v=QA4B7JjQPa8')">https://www.youtube.com/watch?v=QA4B7JjQPa8</span>  
+Piernas: <span class="link" onclick="window.open('https://www.youtube.com/watch?v=v-mQm_droHg')">https://www.youtube.com/watch?v=v-mQm_droHg</span>  
+
+Día 1 - Push (Pecho, Hombro, Tríceps)
+- Press banca plano con barra – 4x6-8
+- Press inclinado con mancuernas – 3x8-10
+- Elevaciones laterales – 3x12-15
+- Extensiones de tríceps en polea – 3x12-15
+
+Día 2 - Pull (Espalda, Bíceps)
+- Peso muerto – 4x6
+- Dominadas – 4xAMRAP
+- Remo con barra – 3x8-10
+- Curl de bíceps con barra – 3x10-12
+
+Día 3 - Piernas
+- Sentadilla con barra – 4x6-8
+- Prensa de piernas – 3x10-12
+- Curl femoral tumbado – 3x12
+- Elevación de talones (pantorrilla) – 3x15-20
+
+Día 4 - Push
+- Press militar con barra – 4x6-8
+- Press banca plano con mancuernas – 3x8-10
+- Elevaciones frontales – 3x12
+- Fondos en paralelas – 3xAMRAP
+
+Día 5 - Pull
+- Jalón al pecho – 4x8-10
+- Remo con mancuerna – 3x10-12
+- Curl martillo – 3x12
+- Face pulls – 3x15
+
+Día 6 - Piernas
+- Sentadilla frontal – 4x6-8
+- Zancadas con mancuernas – 3x12 por pierna
+- Peso muerto rumano – 3x10
+- Elevaciones de pantorrillas – 3x20
+`;
+                } else {
+                    rutina = "Por favor selecciona una ubicación para entrenar.";
+                }
+            } else if (60 <= edad && edad <= 70) {
+                if (ubicacion === "En casa") {
+                    rutina = `
+Rutina en Casa para Adultos Mayores (60-70 años) - 3 días por semana
+
+Día 1 - Movilidad y fuerza básica
+- Marcha en el lugar - 3x1 min
+- Sentadillas asistidas (con silla) - 3x10
+- Flexiones de pared - 3x10
+- Elevación de talones - 3x15
+
+Día 2 - Equilibrio y coordinación
+- Caminata de talón a punta - 3x30 seg
+- Extensión de pierna sentado - 3x12 por pierna
+- Estiramiento de brazos y espalda - 3x30 seg
+- Respiración profunda y control postural - 3x1 min
+
+Día 3 - Fuerza general y flexibilidad
+- Sentarse y pararse (silla) - 3x10
+- Elevación lateral de brazos (botellas pequeñas) - 3x12
+- Marcha atrás - 3x30 seg
+- Estiramientos suaves (cuádriceps, cuello, hombros) - 3x30 seg
+`;
+                } else if (ubicacion === "Gimnasio") {
+                    rutina = `
+Rutina de Gimnasio para Adultos Mayores (60-70 años) - 3 días por semana
+
+Día 1 - Tren inferior
+- Caminadora o bici estática - 10 minutos
+- Prensa de piernas ligera - 3x12
+- Extensión de piernas - 3x12
+- Elevaciones de talones de pie - 3x15
+
+Día 2 - Tren superior
+- Máquina de remo sentado - 3x10
+- Press de pecho en máquina - 3x10
+- Elevaciones frontales con mancuernas ligeras - 3x12
+- Curl de bíceps con mancuernas - 3x12
+
+Día 3 - Full body y movilidad
+- Caminata ligera - 10 minutos
+- Peso muerto con mancuerna ligera (técnica básica) - 3x8
+- Remo con mancuerna - 3x10
+- Estiramientos y movilidad articular - 3x1 min
+`;
+                } else {
+                    rutina = "Por favor selecciona una ubicación para entrenar.";
+                }
+            } else {
+                rutina = "Lo sentimos, esta app solo ofrece rutinas para edades entre 15 y 50 y 60 a 70 años.";
+            }
+            
+            // For textarea, we can't use HTML, so we'll strip the span tags
+            const textareaRutina = rutina.replace(/<span.*?>(.*?)<\/span>/g, '$1');
+            rutinaText.value = textareaRutina;
+            
+            // For div content (if you want to use HTML later)
+            // document.getElementById('rutina-html').innerHTML = rutina;
+            
+            openTab('rutina');
+        }
+        
+        // Add random "gym" labels
+        function addRandomLabels() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 10; i++) {
+                const label = document.createElement('div');
+                label.className = 'gym-label';
+                label.textContent = 'gym';
+                label.style.left = Math.random() * 600 + 'px';
+                label.style.top = Math.random() * 600 + 'px';
+                container.appendChild(label);
+            }
+        }
+        
+        // Initialize
+        window.onload = function() {
+            addRandomLabels();
+            
+            // Handle Enter key press
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const activeTab = document.querySelector('.tab-content.active');
+                    if (activeTab.id === 'bienvenida') {
+                        openTab('datos');
+                    } else if (activeTab.id === 'datos') {
+                        generarRutina();
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
